@@ -7,17 +7,20 @@
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+          <a class="nav-link active" aria-current="page" href="index.php">Collection</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="shop.php">Magasin</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="collection.php">Collection</a>
+          <a class="nav-link" href="login.php">Se connecter</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="drop_rates.php">Infos sur les drop rates</a>
         </li>
       </ul>
       <span class="navbar-text">
-        Navbar text with an inline element
+        La collection de cartes ultime !
       </span>
     </div>
   </div>
