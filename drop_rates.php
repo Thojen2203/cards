@@ -67,7 +67,7 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Carte</th>
-            <th scope="col">Chances commun</th>
+            <th scope="col">Commun</th>
             <th scope="col">Inhabituelle</th>
             <th scope="col">Rare</th>
             <th scope="col">Épique</th>
@@ -105,7 +105,7 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Carte</th>
-            <th scope="col">Chances commun</th>
+            <th scope="col">Commun</th>
             <th scope="col">Inhabituelle</th>
             <th scope="col">Rare</th>
             <th scope="col">Épique</th>
@@ -153,7 +153,7 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Carte</th>
-            <th scope="col">Chances commun</th>
+            <th scope="col">Commun</th>
             <th scope="col">Inhabituelle</th>
             <th scope="col">Rare</th>
             <th scope="col">Épique</th>
@@ -210,7 +210,7 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Carte</th>
-            <th scope="col">Chances commun</th>
+            <th scope="col">Commun</th>
             <th scope="col">Inhabituelle</th>
             <th scope="col">Rare</th>
             <th scope="col">Épique</th>
@@ -287,7 +287,7 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Carte</th>
-            <th scope="col">Chances commun</th>
+            <th scope="col">Commun</th>
             <th scope="col">Inhabituelle</th>
             <th scope="col">Rare</th>
             <th scope="col">Épique</th>
@@ -385,7 +385,7 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Carte</th>
-            <th scope="col">Chances commun</th>
+            <th scope="col">Commun</th>
             <th scope="col">Inhabituelle</th>
             <th scope="col">Rare</th>
             <th scope="col">Épique</th>
@@ -413,7 +413,7 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Carte</th>
-            <th scope="col">Chances commun</th>
+            <th scope="col">Commun</th>
             <th scope="col">Inhabituelle</th>
             <th scope="col">Rare</th>
             <th scope="col">Épique</th>
@@ -441,7 +441,7 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Carte</th>
-            <th scope="col">Chances commun</th>
+            <th scope="col">Commun</th>
             <th scope="col">Inhabituelle</th>
             <th scope="col">Rare</th>
             <th scope="col">Épique</th>
@@ -479,7 +479,7 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Carte</th>
-            <th scope="col">Chances commun</th>
+            <th scope="col">Commun</th>
             <th scope="col">Inhabituelle</th>
             <th scope="col">Rare</th>
             <th scope="col">Épique</th>

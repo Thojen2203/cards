@@ -7,7 +7,11 @@
 <body>
     <?php require_once 'php/header.php'; ?>
     <?php require_once 'php/navbar.php'; ?>
-    <p>blablabla</p>
+    <?php 
+    session_start();
+    if(isset($_SESSION['userid']))
+    
+    ?>
     <?php require_once 'php/footer.php'; ?>
 </body>
 </html>
