@@ -19,7 +19,8 @@
 
     $q = $db -> prepare("select * from user_cards
     right join cards on user_cards.card_id = cards.card_id
-    and user_id = :user_id");
+    and user_id = :user_id
+    left join rarity on cards.card_rarity = rarity.rarity_id");
     $q -> execute([
         "user_id" => $_SESSION['userid']
     ]);
@@ -30,16 +31,10 @@
         <div class="row row-cols-2">
 
     <?php
+    require_once 'php/cards/cardInIndex.php';
     foreach($res as $card){
-        echo "<div class='card m-3' style='width: 18rem; display:inline-block;'>
-            <img src='" . htmlspecialchars($card['card_image_link']) . "' class='card-img-top' alt='" . htmlspecialchars($card['card_name']) . "'>
-            <div class='card-body'>
-                <h5 class='card-title'>" . htmlspecialchars($card['card_name']) . "</h5>
-                <p class='card-text'>" . htmlspecialchars($card['card_description']) . "</p>
-            </div>
-        </div>";
+        displayCard($card, $card['user_id'] !== null, $card['rarity_name']);
     }
-    
     ?>
 
         </div>
