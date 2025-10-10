@@ -24,8 +24,13 @@
         "user_id" => $_SESSION['userid']
     ]);
     $res = $q -> fetchAll();
+    ?>
+
+    <div class="container text-center">
+        <div class="row row-cols-2">
+
+    <?php
     foreach($res as $card){
-        var_dump($card);
         echo "<div class='card m-3' style='width: 18rem; display:inline-block;'>
             <img src='" . htmlspecialchars($card['card_image_link']) . "' class='card-img-top' alt='" . htmlspecialchars($card['card_name']) . "'>
             <div class='card-body'>
@@ -36,6 +41,10 @@
     }
     
     ?>
+
+        </div>
+    </div>
+
     <?php require_once 'php/footer.php'; ?>
 </body>
 </html>
