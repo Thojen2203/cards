@@ -32,10 +32,28 @@
             </div>
         </div>
         <?php
+        try {
+            require_once 'php/database.php';
+            global $db;
+        }
+        catch (Exception $e) {
+            die('Une erreur est survenue. Veuillez réessayer plus tard.');
+        }
+
         if(isset($_POST['username']) && isset($_POST['password'])) {
-            echo '<script>
-                document.getElementById("message").innerHTML = `<div class="alert alert-danger" role="alert">' . htmlspecialchars($_GET['error']) . '</div>`;
-            </script>';
+            $q = $db -> prepare("SELECT * FROM user WHERE user_name = :username");
+            $q -> execute(['username' => $_POST['username']]);
+            $user = $q -> fetch();
+            if($user && password_verify($_POST['password'], $user['user_password'])) {
+                // Login successful
+                $_SESSION['userid'] = $user['user_id'];
+                $_SESSION['username'] = $user['user_name'];
+                header("Location: index.php");
+                exit();
+            } else {
+                // Login failed
+                echo '<div class="alert alert-danger">Nom d\'utilisateur ou mot de passe incorrect.</div>';
+            }
         }
         ?>
         <?php require_once 'php/footer.php'; ?>

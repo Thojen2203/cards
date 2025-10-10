@@ -39,9 +39,7 @@
             exit;
         }
         else{
-
-            // TODO: Ajouter la logique d'inscription (validation, enregistrement en base de données, etc.)
-
+            global $db;
             $q = $db ->prepare("INSERT INTO user (user_name, user_password) VALUES (:username, :password)");
             $q->execute([
                 'username' => $username,
@@ -49,7 +47,7 @@
             ]);
 
             $_SESSION['username'] = $username;
-            $_SESSION['userid'];
+            $_SESSION['userid']= null;
 
             $q = $db -> prepare("SELECT user_id FROM user WHERE user_name = :username");
             $q->execute(['username' => $username]);
