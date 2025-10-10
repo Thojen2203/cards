@@ -1,7 +1,7 @@
 <?php
-function generateHTMLBoosterPackCard($imageSource, $cardName, $cardTitle, $cardDescription, $buttonText): string
+function generateHTMLBoosterPackCard($imageSource, $cardTitle, $cardDescription, $buttonText): string
 {
-    $HTML = '
+    return '
     <div class="card m-3">
         <img src="' . $imageSource . '" class="card-img-top" alt="' . $cardTitle . '">
         <div class="card-body">
