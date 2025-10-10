@@ -28,12 +28,14 @@
     ?>
 
     <div class="container text-center">
-        <div class="row row-cols-2">
+        <div class="row row-cols-3 row-cols-md-6 g-1 justify-content-center">
 
     <?php
     require_once 'php/cards/cardInIndex.php';
     foreach($res as $card){
+        echo "<div class='col'>";
         displayCard($card, $card['user_id'] !== null, $card['rarity_name']);
+        echo "</div>";
     }
     ?>
 

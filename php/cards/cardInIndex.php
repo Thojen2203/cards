@@ -1,7 +1,7 @@
 <?php
 function displayCard($card, $isUnlocked, $rarityName) {
     echo "
-        <div class='card " . ($isUnlocked ? "" : "opacity-50") . " m-3' style='width: 18rem; display:inline-block;'>
+        <div class='card " . ($isUnlocked ? "" : "opacity-50") . " m-3'>
             <img src='" . htmlspecialchars($card['card_image_link']) . "' class='card-img-top' alt='" . htmlspecialchars($card['card_name']) . "'>
             <div class='card-body'>
                 <h5 class='card-title'>" . htmlspecialchars($card['card_name']) . "</h5>
