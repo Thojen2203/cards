@@ -24,3 +24,14 @@
 .hidden-data {
   display: none;
 }
+
+.pack-opening-card {
+  width: 300px;
+  height: 420px;
+  perspective: 1000px;
+  margin: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

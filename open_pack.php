@@ -43,7 +43,7 @@
                     "user_id" => $user_id,
                 ]);
 
-                echo "Doublon : $coinsToAdd pièces ajoutées !";
+                // echo "Doublon : $coinsToAdd pièces ajoutées !";
             }
             else{
                 $insert = $db -> prepare("insert into user_cards (user_id, card_id, quantity) values (:user_id, :card_id, :quantity)");
@@ -163,7 +163,7 @@
 
     $p = $db -> prepare("select * from purchasablepacks join packs using(pack_id) where purchasablepacks.pack_id = :pack_id");
 
-    $q = $db -> prepare("SELECT * from card_rate_drop where pack_id = :packId");
+    $q = $db -> prepare("SELECT * from card_rate_drop where pack_id = :packId order by drop_in_pack_number desc");
     $q -> execute(["packId" => $packId]);
     $res = $q -> fetchAll();
 
@@ -183,7 +183,7 @@
         $randomMax = 1000000;
         $random = rand(1,1000000);
         if($random <= $row['common_drop_rate']*$randomMax){ 
-            echo "Carte commune débloquée !";
+            // echo "Carte commune débloquée !";
             $c = $db -> prepare("select * from cards where card_rarity = 1 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
@@ -191,7 +191,7 @@
             $rarity = 1;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate'])*$randomMax){
-            echo "Carte peu commune débloquée !";
+            // echo "Carte peu commune débloquée !";
             $c = $db -> prepare("select * from cards where card_rarity = 2 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
@@ -199,7 +199,7 @@
             $rarity = 2;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate']+$row['rare_drop_rate'])*$randomMax){
-            echo "Carte rare débloquée !";
+            // echo "Carte rare débloquée !";
             $c = $db -> prepare("select * from cards where card_rarity = 3 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
@@ -207,7 +207,7 @@
             $rarity = 3;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate']+$row['rare_drop_rate']+$row['epic_drop_rate'])*$randomMax){
-            echo "Carte épique débloquée !";
+            // echo "Carte épique débloquée !";
             $c = $db -> prepare("select * from cards where card_rarity = 4 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
@@ -215,7 +215,7 @@
             $rarity = 4;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate']+$row['rare_drop_rate']+$row['epic_drop_rate']+$row['mythic_drop_rate'])*$randomMax){
-            echo "Carte mythique débloquée !";
+            // echo "Carte mythique débloquée !";
             $c = $db -> prepare("select * from cards where card_rarity = 5 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
@@ -223,22 +223,23 @@
             $rarity = 5;
         }
         else{
-            echo "Carte légendaire débloquée !";
+            // echo "Carte légendaire débloquée !";
             $c = $db -> prepare("select * from cards where card_rarity = 6 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
             giveCardToUser($_SESSION['userid'], $card['card_id'], 6);
             $rarity = 6;
         }
-        echo "<br>";
-        displayCard($card, $card['card_id'], $rarity);
-        echo "<br>";
+        // echo "<br>";
+        displayCardInPackOpening($card, $card['card_id'], $rarity, $row['pack_id']);
+        // echo "<br>";
     }
 
     if(isset($_GET['gift']))
         echo "<a href='shop.php'>Retour à la boutique</a>";
 
     ?>
+    <script src="js/packOpeningAnimation.js"></script>
     <?php require_once 'php/footer.php'; ?>
 </body>
 </html>

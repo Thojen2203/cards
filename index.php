@@ -34,7 +34,7 @@
     require_once 'php/cards/cardInIndex.php';
     foreach($res as $card){
         echo "<div class='col'>";
-        displayCard($card, $card['user_id'] !== null, $card['rarity_name']);
+        displayCardInIndex($card, $card['user_id'] !== null, $card['rarity_name']);
         echo "</div>";
     }
     ?>
