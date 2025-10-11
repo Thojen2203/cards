@@ -107,6 +107,8 @@
                 $packId = 1;
                 $u = $db -> prepare("update user set last_2h_gift = now() where user_id = :user_id");
                 $u -> execute(["user_id" => $_SESSION['userid']]);
+                $c = $db -> prepare("update user set user_coins = user_coins + 10 where user_id = :user_id");
+                $c -> execute(["user_id" => $_SESSION['userid']]);
             }
             else if($_GET['gift'] == 'daily'){
                 $v = $db -> prepare("select last_24h_gift from user where user_id = :user_id");
@@ -119,6 +121,8 @@
                 $packId = 2;
                 $u = $db -> prepare("update user set last_24h_gift = now() where user_id = :user_id");
                 $u -> execute(["user_id" => $_SESSION['userid']]);
+                $c = $db -> prepare("update user set user_coins = user_coins + 30 where user_id = :user_id");
+                $c -> execute(["user_id" => $_SESSION['userid']]);
             }
             else if($_GET['gift'] == '3d'){
                 $v = $db -> prepare("select last_3d_gift from user where user_id = :user_id");
@@ -131,6 +135,8 @@
                 $packId = 3;
                 $u = $db -> prepare("update user set last_3d_gift = now() where user_id = :user_id");
                 $u -> execute(["user_id" => $_SESSION['userid']]);
+                $c = $db -> prepare("update user set user_coins = user_coins + 50 where user_id = :user_id");
+                $c -> execute(["user_id" => $_SESSION['userid']]);
             }
             else if($_GET['gift'] == '7d'){
                 $v = $db -> prepare("select last_7d_gift from user where user_id = :user_id");
@@ -145,6 +151,8 @@
                 $packId = 4;
                 $u = $db -> prepare("update user set last_7d_gift = now() where user_id = :user_id");
                 $u -> execute(["user_id" => $_SESSION['userid']]);
+                $c = $db -> prepare("update user set user_coins = user_coins + 100 where user_id = :user_id");
+                $c -> execute(["user_id" => $_SESSION['userid']]);
             }
             else{
                 header("Location: shop.php");
@@ -159,6 +167,10 @@
     $q -> execute(["packId" => $packId]);
     $res = $q -> fetchAll();
 
+    require_once 'php/cards/cardInIndex.php';
+
+    $rarity = 0;
+    $card=null;
     foreach($res as $row){
         // echo $row['drop_in_pack_number'] . " "
         // . $row['common_drop_rate']
@@ -172,46 +184,54 @@
         $random = rand(1,1000000);
         if($random <= $row['common_drop_rate']*$randomMax){ 
             echo "Carte commune débloquée !";
-            $c = $db -> prepare("select card_id from cards where card_rarity = 1 order by rand() limit 1");
+            $c = $db -> prepare("select * from cards where card_rarity = 1 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
             giveCardToUser($_SESSION['userid'], $card['card_id'], 1);
+            $rarity = 1;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate'])*$randomMax){
             echo "Carte peu commune débloquée !";
-            $c = $db -> prepare("select card_id from cards where card_rarity = 2 order by rand() limit 1");
+            $c = $db -> prepare("select * from cards where card_rarity = 2 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
             giveCardToUser($_SESSION['userid'], $card['card_id'], 2);
+            $rarity = 2;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate']+$row['rare_drop_rate'])*$randomMax){
             echo "Carte rare débloquée !";
-            $c = $db -> prepare("select card_id from cards where card_rarity = 3 order by rand() limit 1");
+            $c = $db -> prepare("select * from cards where card_rarity = 3 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
             giveCardToUser($_SESSION['userid'], $card['card_id'], 3);
+            $rarity = 3;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate']+$row['rare_drop_rate']+$row['epic_drop_rate'])*$randomMax){
             echo "Carte épique débloquée !";
-            $c = $db -> prepare("select card_id from cards where card_rarity = 4 order by rand() limit 1");
+            $c = $db -> prepare("select * from cards where card_rarity = 4 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
             giveCardToUser($_SESSION['userid'], $card['card_id'], 4);
+            $rarity = 4;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate']+$row['rare_drop_rate']+$row['epic_drop_rate']+$row['mythic_drop_rate'])*$randomMax){
             echo "Carte mythique débloquée !";
-            $c = $db -> prepare("select card_id from cards where card_rarity = 5 order by rand() limit 1");
+            $c = $db -> prepare("select * from cards where card_rarity = 5 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
             giveCardToUser($_SESSION['userid'], $card['card_id'], 5);
+            $rarity = 5;
         }
         else{
             echo "Carte légendaire débloquée !";
-            $c = $db -> prepare("select card_id from cards where card_rarity = 6 order by rand() limit 1");
+            $c = $db -> prepare("select * from cards where card_rarity = 6 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
             giveCardToUser($_SESSION['userid'], $card['card_id'], 6);
+            $rarity = 6;
         }
+        echo "<br>";
+        displayCard($card, $card['card_id'], $rarity);
         echo "<br>";
     }
 

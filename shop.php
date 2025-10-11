@@ -63,10 +63,10 @@
         $q = $db -> prepare("SELECT last_2h_gift, last_24h_gift, last_3d_gift, last_7d_gift from user where user_id = :user_id");
         $q -> execute(["user_id" => $_SESSION['userid']]);
         $res = $q -> fetch();
-        echo displayFreeGiftsCard("Cadeau de 2 h", "Petit pack gratuit toutes les 2 heures", $res['last_2h_gift'], 7200, 1);
-        echo displayFreeGiftsCard("Cadeau de 1 j", "Pack Plus gratuit toutes les 24 heures", $res['last_24h_gift'], 86400, 2);
-        echo displayFreeGiftsCard("Cadeau de 3 j", "Gros pack gratuit tous les 3 jours", $res['last_3d_gift'], 259200, 3);
-        echo displayFreeGiftsCard("Cadeau de 7 j", "Giga pack gratuit tous les 7 jours", $res['last_7d_gift'], 604800, 4);
+        echo displayFreeGiftsCard("Cadeau de 2 h", "Petit pack gratuit + 10 pièces toutes les 2 heures", $res['last_2h_gift'], 7200, 1);
+        echo displayFreeGiftsCard("Cadeau de 1 j", "Pack Plus gratuit + 30 pièces toutes les 24 heures", $res['last_24h_gift'], 86400, 2);
+        echo displayFreeGiftsCard("Cadeau de 3 j", "Gros pack gratuit + 50 pièces tous les 3 jours", $res['last_3d_gift'], 259200, 3);
+        echo displayFreeGiftsCard("Cadeau de 7 j", "Giga pack gratuit + 100 pièces tous les 7 jours", $res['last_7d_gift'], 604800, 4);
 
         ?>
       </div>
