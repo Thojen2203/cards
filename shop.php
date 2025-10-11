@@ -53,7 +53,7 @@
             $currency = '<i class="bi bi-coin"></i>';
           else if($row['price_currency'] == 'diamonds')
             $currency = '<i class="bi bi-gem"></i>';
-          echo generateHTMLBoosterPackCard($row["pack_icon_link"],$row['pack_name'], $row['pack_description'], $row['pack_price'], $currency);
+          echo generateHTMLBoosterPackCard($row["pack_icon_link"],$row['pack_name'], $row['pack_description'], $row['pack_price'], $currency, $row['pack_id']);
         }
         ?>
       </div>

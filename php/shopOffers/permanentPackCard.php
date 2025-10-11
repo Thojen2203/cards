@@ -1,5 +1,5 @@
 <?php
-function generateHTMLBoosterPackCard($imageSource, $cardTitle, $cardDescription, $buttonText, $currency): string
+function generateHTMLBoosterPackCard($imageSource, $cardTitle, $cardDescription, $buttonText, $currency, $id): string
 {
     return '
     <div class="card m-3">
@@ -11,7 +11,7 @@ function generateHTMLBoosterPackCard($imageSource, $cardTitle, $cardDescription,
                 <div class="card-body">
                     <h5 class="card-title">' . $cardTitle . '</h5>
                     <p class="card-text">'. $cardDescription.'</p>
-                    <button type="button" class="btn btn-primary btn-lg">'. $buttonText. ' ' . $currency . '</button>
+                    <button type="button" class="btn btn-primary btn-lg" id="pack-button-' . $id . '">'. $buttonText. ' ' . $currency . '</button>
                 </div>
             </div>
         </div>
