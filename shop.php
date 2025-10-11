@@ -8,27 +8,45 @@
 
 <body>
   <?php require_once 'php/header.php'; ?>
-  <?php require_once 'php/navbar.php'; ?>
+  <?php require_once 'php/navbar.php';
+          try{
+          require_once 'php/database.php';
+          global $db;
+          require_once 'php/shopOffers/permanentPackCard.php';
+        } catch(Exception $e){
+          echo 'Une erreur est survenue. Merci de réessayer plus tard.';
+
+        }
+?>
   <h1 class="text-center my-4">Bienvenue dans la boutique Kards !</h1>
+  <h2><?php session_start(); $q = $db -> prepare("SELECT user_coins from user where user_id = :user_id");
+    $q -> execute(["user_id" => $_SESSION['userid']]);
+    $res = $q -> fetch();
+    echo "Vous avez " . $res['user_coins'] . " pièces.";
+   ?></h2>
   <div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col">
         <?php
-        try{
-          require_once 'php/database.php';
-          global $db;
-          require_once 'php/shopOffers/card.php';
-        }catch(Exception $e){
-          echo 'Une erreur est survenue. Merci de réessayer plus tard.';
-
-        }
         $q = $db -> prepare("SELECT * from purchasablepacks join packs using(pack_id)");
         $q -> execute();
 
         $res = $q -> fetchAll();
         foreach($res as $row){
-          echo generateHTMLBoosterPackCard($row["pack_icon_link"],$row['pack_name'], $row['pack_description'], $row['pack_price']);
+          if($row['price_currency'] == 'coins')
+            $currency = '<i class="bi bi-coin"></i>';
+          else if($row['price_currency'] == 'diamonds')
+            $currency = '<i class="bi bi-gem"></i>';
+          echo generateHTMLBoosterPackCard($row["pack_icon_link"],$row['pack_name'], $row['pack_description'], $row['pack_price'], $currency);
         }
+        ?>
+      </div>
+      <div class="col">
+        <?php
+        $q = $db -> prepare("SELECT last_2h_gift, last_24h_gift, last_3d_gift, last_7d_gift from user where user_id = :user_id");
+        $q -> execute(["user_id" => $_SESSION['userid']]);
+        $res = $q -> fetch();
+        echo "Derniers cadeaux : " . $res['last_2h_gift'] . ", " . $res['last_24h_gift'] . ", " . $res['last_3d_gift'] . ", " . $res['last_7d_gift'];
         ?>
       </div>
     </div>

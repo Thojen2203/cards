@@ -29,11 +29,10 @@
                 else if($rarity_id == 5) $coinsToAdd = 75;
                 else if($rarity_id == 6) $coinsToAdd = 150;
 
-                $updateCardAmount = $db -> prepare("update user set user_coins = user_coins + :amount where user_id = :user_id and card_id = :card_id");
+                $updateCardAmount = $db -> prepare("update user set user_coins = user_coins + :amount where user_id = :user_id");
                 $updateCardAmount -> execute([
                     "amount" => $coinsToAdd,
                     "user_id" => $user_id,
-                    "card_id" => $card_id
                 ]);
 
                 echo "Vous avez déjà cette carte. Vous recevez $coinsToAdd pièces à la place.";
