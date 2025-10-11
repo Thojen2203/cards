@@ -21,7 +21,22 @@
                 "card_id" => $card_id
             ]);
             if($hasCard -> rowCount() > 0){
-                $updateCardAmount = $db -> prepare("update user_cards set quantity = quantity + 1 where user_id = :user_id and card_id = :card_id");
+                $coinsToAdd = 0;
+                if($rarity_id == 1) $coinsToAdd = 2;
+                else if($rarity_id == 2) $coinsToAdd = 5;
+                else if($rarity_id == 3) $coinsToAdd = 10;
+                else if($rarity_id == 4) $coinsToAdd = 25;
+                else if($rarity_id == 5) $coinsToAdd = 75;
+                else if($rarity_id == 6) $coinsToAdd = 150;
+
+                $updateCardAmount = $db -> prepare("update user set user_coins = user_coins + :amount where user_id = :user_id and card_id = :card_id");
+                $updateCardAmount -> execute([
+                    "amount" => $coinsToAdd,
+                    "user_id" => $user_id,
+                    "card_id" => $card_id
+                ]);
+
+                echo "Vous avez déjà cette carte. Vous recevez $coinsToAdd pièces à la place.";
             }
             else{
                 $insert = $db -> prepare("insert into user_cards (user_id, card_id, quantity) values (:user_id, :card_id, :quantity)");
