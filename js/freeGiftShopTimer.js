@@ -1,5 +1,3 @@
-function startFreeGiftTimer(duration) {
-setInterval(() => {
 document.addEventListener('DOMContentLoaded', () => {
     // helper pour ajouter un 0 devant les nombres < 10
     const pad = n => String(n).padStart(2, '0');
@@ -24,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const now = Date.now();
             const lastMs = lastSeconds * 1000; // PHP fournit des timestamps en secondes
-            const nextMs = nextSeconds * 1000;
+            const nextMs = nextSeconds * 1000;  // PHP fournit des timestamps en secondes
             const remaining = nextMs - now;
 
             if (remaining > 0) {
@@ -52,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const duration = nextMs - lastMs;
                 const elapsed = Math.max(0, Math.min(duration, now - lastMs));
                 const percent = duration > 0 ? (elapsed / duration) * 100 : 0;
-                progressBar.style.width = Math.round(percent) + '%';
+                progressBar.style.width = percent + '%';
             }
         });
     }
