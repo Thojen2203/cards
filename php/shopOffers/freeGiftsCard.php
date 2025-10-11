@@ -4,25 +4,20 @@ date_default_timezone_set('Europe/Paris');
 
 function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed, $timeUntilNextGift, $pageId): string
 {
-    if((time() - strtotime($timeLastUsed)) >= 7200) {
+    if((time() - strtotime($timeLastUsed)) >= $timeUntilNextGift){ 
             return '
-            <div class="card m-3">
-                <div class="row g-0">
-                    <div class="col-md-8">
+            <div class="card m-3 w-100">
                         <div class="card-body">
                             <h5 class="card-title">' . $cardTitle . '</h5>
                             <p class="card-text">'. $cardDescription.'</p>
                             <button class="btn btn-primary" id="free-gift-button' . $pageId . '">GRATUIT</button>
                         </div>
-                    </div>
-                </div>
             </div>
     ';
+    
     } else {
            return '
-            <div class="card m-3">
-                <div class="row g-0">
-                    <div class="col-md-8">
+            <div class="card m-3 w-100">
                         <div class="card-body">
                             <h5 class="card-title">' . $cardTitle . '</h5>
                             <p class="card-text">'. $cardDescription.'</p>
@@ -32,10 +27,8 @@ function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed, $time
                             <p class="free-gift-timer" id="next-gift-timer' . $pageId . '">Prochain cadeau dans </p>
                             <p class="hidden-data" id="last-free-gift' . $pageId . '"> ' . strtotime($timeLastUsed) . '</p>
                             <p class="hidden-data" id="next-free-gift' . $pageId . '"> ' . (strtotime($timeLastUsed) + $timeUntilNextGift) . '</p>
-                            <button class="btn btn-outline-secondary" id="free-gift-button' . $pageId . '">Non disponible</button>
+                            <button class="btn btn-outline-secondary" id="free-gift-button' . $pageId . '" disabled>Non disponible</button>
                         </div>
-                    </div>
-                </div>
             </div>
     ';
 

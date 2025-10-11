@@ -26,6 +26,21 @@
     echo "<span class='badge text-bg-secondary m-3'>" . $res['user_diamonds'] . " <i class='bi bi-gem'></i></span></h1>";
    ?></h2>
   <div>
+    <?php
+    if(isset($_GET['error']))
+      if($_GET['error'] == 'too_soon')
+        echo '<div class="alert alert-warning text-center" role="alert">
+              Ce cadeau n\'est pas encore disponible, veuillez patienter !
+            </div>';
+        else if($_GET['error'] == 'not_enough_coins')
+          echo '<div class="alert alert-danger text-center" role="alert">
+                Vous n\'avez pas assez de pièces pour acheter ce pack !
+              </div>';
+        else if($_GET['error'] == 'not_enough_diamonds')
+          echo '<div class="alert alert-danger text-center" role="alert">
+                Vous n\'avez pas assez de diamants pour acheter ce pack !
+              </div>';
+    ?>
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col">
         <?php

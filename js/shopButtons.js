@@ -14,3 +14,4 @@ document.getElementById('free-gift-button4').addEventListener('click', () => {
     // Logique pour gérer le clic sur le bouton du cadeau gratuit
     window.location.href = 'open_pack.php?gift=7d';
 });
+

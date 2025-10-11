@@ -9,6 +9,8 @@
     <?php require_once 'php/navbar.php'; ?>
     <?php
 
+    date_default_timezone_set('Europe/Paris');
+
     session_start();
 
     if(!isset($_SESSION['userid']))
@@ -60,30 +62,86 @@
     require_once 'php/database.php';
     global $db;
 
-    $q = $db -> prepare("select user_coins from user where user_id = :user_id");
+    $q = $db -> prepare("select user_coins, user_diamonds from user where user_id = :user_id");
     $q -> execute(["user_id" => $_SESSION['userid']]);
     $res = $q -> fetch();
 
-    if(isset($_GET['pack_id']))
+    if(isset($_GET['pack_id'])){
         $packId = $_GET['pack_id'];
-    else{
+        $p = $db -> prepare("select pack_price, price_currency from purchasablepacks join packs using(pack_id) where purchasablepacks.pack_id = :pack_id");
+        $p -> execute(["pack_id" => $packId]);
+        $packPrice = $p -> fetch();
+        if($packPrice['price_currency'] == 'coins'){
+            if($res['user_coins'] < $packPrice['pack_price']){
+                header("Location: shop.php?error=not_enough_coins");
+                die();
+            }
+            $u = $db -> prepare("update user set user_coins = user_coins - :price where user_id = :user_id");
+            $u -> execute([
+                "price" => $packPrice['pack_price'],
+                "user_id" => $_SESSION['userid']
+            ]);
+        }
+        else if($packPrice['price_currency'] == 'diamonds'){
+            if($res['user_diamonds'] < $packPrice['pack_price']){
+                header("Location: shop.php?error=not_enough_diamonds");
+                die();
+            }
+            $u = $db -> prepare("update user set user_diamonds = user_diamonds - :price where user_id = :user_id");
+            $u -> execute([
+                "price" => $packPrice['pack_price'],
+                "user_id" => $_SESSION['userid']
+            ]);
+            die();
+        }
+    } else {
         if(isset($_GET['gift'])){
             if($_GET['gift'] == '2h'){
+                $v = $db -> prepare("select last_2h_gift from user where user_id = :user_id");
+                $v -> execute(["user_id" => $_SESSION['userid']]);
+                $lastUsed = $v -> fetch();
+                if((time() - strtotime($lastUsed['last_2h_gift'])) < 7200){
+                    header("Location: shop.php?error=too_soon");
+                    die();
+                }
                 $packId = 1;
                 $u = $db -> prepare("update user set last_2h_gift = now() where user_id = :user_id");
                 $u -> execute(["user_id" => $_SESSION['userid']]);
             }
             else if($_GET['gift'] == 'daily'){
+                $v = $db -> prepare("select last_24h_gift from user where user_id = :user_id");
+                $v -> execute(["user_id" => $_SESSION['userid']]);
+                $lastUsed = $v -> fetch();
+                if((time() - strtotime($lastUsed['last_24h_gift'])) < 86400){
+                    header("Location: shop.php?error=too_soon");
+                    die();
+                }
                 $packId = 2;
                 $u = $db -> prepare("update user set last_24h_gift = now() where user_id = :user_id");
                 $u -> execute(["user_id" => $_SESSION['userid']]);
             }
             else if($_GET['gift'] == '3d'){
+                $v = $db -> prepare("select last_3d_gift from user where user_id = :user_id");
+                $v -> execute(["user_id" => $_SESSION['userid']]);
+                $lastUsed = $v -> fetch();
+                if((time() - strtotime($lastUsed['last_3d_gift'])) < 259200){
+                    header("Location: shop.php?error=too_soon");
+                    die();
+                }
                 $packId = 3;
                 $u = $db -> prepare("update user set last_3d_gift = now() where user_id = :user_id");
                 $u -> execute(["user_id" => $_SESSION['userid']]);
             }
             else if($_GET['gift'] == '7d'){
+                $v = $db -> prepare("select last_7d_gift from user where user_id = :user_id");
+                $v -> execute(["user_id" => $_SESSION['userid']]);
+                $lastUsed = $v -> fetch();
+                if((time() - strtotime($lastUsed['last_7d_gift'])) < 604800){
+                    var_dump(time() - strtotime($lastUsed['last_7d_gift']));
+                    var_dump(strtotime($lastUsed['last_7d_gift']));
+                    //header("Location: shop.php?error=too_soon");
+                    die();
+                }
                 $packId = 4;
                 $u = $db -> prepare("update user set last_7d_gift = now() where user_id = :user_id");
                 $u -> execute(["user_id" => $_SESSION['userid']]);
@@ -156,6 +214,9 @@
         }
         echo "<br>";
     }
+
+    if(isset($_GET['gift']))
+        echo "<a href='shop.php'>Retour à la boutique</a>";
 
     ?>
     <?php require_once 'php/footer.php'; ?>
