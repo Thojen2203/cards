@@ -43,10 +43,15 @@
       </div>
       <div class="col">
         <?php
+        require_once 'php/shopOffers/freeGiftsCard.php';
         $q = $db -> prepare("SELECT last_2h_gift, last_24h_gift, last_3d_gift, last_7d_gift from user where user_id = :user_id");
         $q -> execute(["user_id" => $_SESSION['userid']]);
         $res = $q -> fetch();
-        echo "Derniers cadeaux : " . $res['last_2h_gift'] . ", " . $res['last_24h_gift'] . ", " . $res['last_3d_gift'] . ", " . $res['last_7d_gift'];
+        echo displayFreeGiftsCard("Cadeau de 2 h", "Petit pack gratuit toutes les 2 heures", $res['last_2h_gift']);
+        echo displayFreeGiftsCard("Cadeau de 1 j", "Pack Plus gratuit toutes les 24 heures", $res['last_24h_gift']);
+        echo displayFreeGiftsCard("Cadeau de 3 j", "Gros pack gratuit tous les 3 jours", $res['last_3d_gift']);
+        echo displayFreeGiftsCard("Cadeau de 7 j", "Giga pack gratuit tous les 7 jours", $res['last_7d_gift']);
+
         ?>
       </div>
     </div>

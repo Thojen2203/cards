@@ -20,3 +20,7 @@
 .card{
   display: inline-block;
 }
+
+.hidden-data {
+  display: none;
+}
