@@ -11,6 +11,12 @@
 
     session_start();
 
+    if(!isset($_SESSION['userid']))
+        header("Location: login.php");
+
+    else
+        echo "<h1 class='text-center my-4'>Ouverture de pack</h1>";
+
     function giveCardToUser($user_id, $card_id, $rarity_id){
         try{
             require_once 'php/database.php';
@@ -22,11 +28,11 @@
             ]);
             if($hasCard -> rowCount() > 0){
                 $coinsToAdd = 0;
-                if($rarity_id == 1) $coinsToAdd = 2;
-                else if($rarity_id == 2) $coinsToAdd = 5;
-                else if($rarity_id == 3) $coinsToAdd = 10;
-                else if($rarity_id == 4) $coinsToAdd = 25;
-                else if($rarity_id == 5) $coinsToAdd = 75;
+                if($rarity_id == 1) $coinsToAdd = 1;
+                else if($rarity_id == 2) $coinsToAdd = 2;
+                else if($rarity_id == 3) $coinsToAdd = 5;
+                else if($rarity_id == 4) $coinsToAdd = 10;
+                else if($rarity_id == 5) $coinsToAdd = 50;
                 else if($rarity_id == 6) $coinsToAdd = 150;
 
                 $updateCardAmount = $db -> prepare("update user set user_coins = user_coins + :amount where user_id = :user_id");
@@ -35,7 +41,7 @@
                     "user_id" => $user_id,
                 ]);
 
-                echo "Vous avez déjà cette carte. Vous recevez $coinsToAdd pièces à la place.";
+                echo "Doublon : $coinsToAdd pièces ajoutées !";
             }
             else{
                 $insert = $db -> prepare("insert into user_cards (user_id, card_id, quantity) values (:user_id, :card_id, :quantity)");
@@ -50,10 +56,49 @@
         }
     }
 
+
     require_once 'php/database.php';
     global $db;
-    $q = $db -> prepare("SELECT * from card_rate_drop where pack_id = 3");
-    $q -> execute();
+
+    $q = $db -> prepare("select user_coins from user where user_id = :user_id");
+    $q -> execute(["user_id" => $_SESSION['userid']]);
+    $res = $q -> fetch();
+
+    if(isset($_GET['pack_id']))
+        $packId = $_GET['pack_id'];
+    else{
+        if(isset($_GET['gift'])){
+            if($_GET['gift'] == '2h'){
+                $packId = 1;
+                $u = $db -> prepare("update user set last_2h_gift = now() where user_id = :user_id");
+                $u -> execute(["user_id" => $_SESSION['userid']]);
+            }
+            else if($_GET['gift'] == 'daily'){
+                $packId = 2;
+                $u = $db -> prepare("update user set last_24h_gift = now() where user_id = :user_id");
+                $u -> execute(["user_id" => $_SESSION['userid']]);
+            }
+            else if($_GET['gift'] == '3d'){
+                $packId = 3;
+                $u = $db -> prepare("update user set last_3d_gift = now() where user_id = :user_id");
+                $u -> execute(["user_id" => $_SESSION['userid']]);
+            }
+            else if($_GET['gift'] == '7d'){
+                $packId = 4;
+                $u = $db -> prepare("update user set last_7d_gift = now() where user_id = :user_id");
+                $u -> execute(["user_id" => $_SESSION['userid']]);
+            }
+            else{
+                header("Location: shop.php");
+                die();
+            }
+        }
+    }
+
+    $p = $db -> prepare("select * from purchasablepacks join packs using(pack_id) where purchasablepacks.pack_id = :pack_id");
+
+    $q = $db -> prepare("SELECT * from card_rate_drop where pack_id = :packId");
+    $q -> execute(["packId" => $packId]);
     $res = $q -> fetchAll();
 
     foreach($res as $row){

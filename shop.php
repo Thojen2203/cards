@@ -18,11 +18,12 @@
 
         }
 ?>
-  <h1 class="text-center my-4">Bienvenue dans la boutique Kards !</h1>
-  <h2><?php session_start(); $q = $db -> prepare("SELECT user_coins from user where user_id = :user_id");
+  <h1 class="text-center my-4">Boutique&</h1>
+  <h2 class="text-center my-4"><?php session_start(); $q = $db -> prepare("SELECT user_coins, user_diamonds from user where user_id = :user_id");
     $q -> execute(["user_id" => $_SESSION['userid']]);
     $res = $q -> fetch();
-    echo "Vous avez " . $res['user_coins'] . " pièces.";
+    echo "<h1 class='text-center'><span class='badge text-bg-secondary m-3'>" . $res['user_coins'] . " <i class='bi bi-coin'></i></span>";
+    echo "<span class='badge text-bg-secondary m-3'>" . $res['user_diamonds'] . " <i class='bi bi-gem'></i></span></h1>";
    ?></h2>
   <div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -56,7 +57,9 @@
       </div>
     </div>
   </div>
+  <script src="js/betterTimer.js"></script>
   <script src="js/freeGiftShopTimer.js"></script>
+  <script src="js/shopButtons.js"></script>
   <?php require_once 'php/footer.php'; ?>
 </body>
 

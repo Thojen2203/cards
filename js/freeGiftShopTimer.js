@@ -26,12 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const remaining = nextMs - now;
 
             if (remaining > 0) {
-                const hours = Math.floor(remaining / 3600000);
-                const minutes = Math.floor((remaining % 3600000) / 60000);
-                const seconds = Math.floor((remaining % 60000) / 1000);
-                timerEl.textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+                timerEl.textContent = formatTime(remaining, 2);
             } else {
-                timerEl.textContent = 'Cadeau prêt à être réclamé !';
+                timerEl.textContent = 'Cadeau prêt à être réclamé ! Rafraichissez la page.';
             }
 
             // mise à jour de la progress-bar si elle est présente dans le même conteneur parent

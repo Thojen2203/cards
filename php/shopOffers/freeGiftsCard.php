@@ -4,9 +4,6 @@ date_default_timezone_set('Europe/Paris');
 
 function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed, $timeUntilNextGift, $pageId): string
 {
-    var_dump(strtotime($timeLastUsed));
-    var_dump(time());
-    var_dump(time() - strtotime($timeLastUsed));
     if((time() - strtotime($timeLastUsed)) >= 7200) {
             return '
             <div class="card m-3">
@@ -15,7 +12,7 @@ function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed, $time
                         <div class="card-body">
                             <h5 class="card-title">' . $cardTitle . '</h5>
                             <p class="card-text">'. $cardDescription.'</p>
-                            <button class="btn btn-primary">GRATUIT</button>
+                            <button class="btn btn-primary" id="free-gift-button' . $pageId . '">GRATUIT</button>
                         </div>
                     </div>
                 </div>
@@ -29,13 +26,13 @@ function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed, $time
                         <div class="card-body">
                             <h5 class="card-title">' . $cardTitle . '</h5>
                             <p class="card-text">'. $cardDescription.'</p>
-                            <button class="btn btn-outline-secondary">Non disponible</button>
-                            <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress w-100" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                                 <div class="progress-bar" style="width: ' . (time() - strtotime($timeLastUsed)) / 7200 * 100 . '%"></div>
                             </div>
-                            <p class="free-gift-timer" id="next-gift-timer$pageId">Prochain cadeau dans </p>
-                            <p class="hidden-data" id="last-free-gift$pageId"> ' . strtotime($timeLastUsed) . '</p>
-                            <p class="hidden-data" id="next-free-gift$pageId"> ' . (strtotime($timeLastUsed) + $timeUntilNextGift) . '</p>
+                            <p class="free-gift-timer" id="next-gift-timer' . $pageId . '">Prochain cadeau dans </p>
+                            <p class="hidden-data" id="last-free-gift' . $pageId . '"> ' . strtotime($timeLastUsed) . '</p>
+                            <p class="hidden-data" id="next-free-gift' . $pageId . '"> ' . (strtotime($timeLastUsed) + $timeUntilNextGift) . '</p>
+                            <button class="btn btn-outline-secondary" id="free-gift-button' . $pageId . '">Non disponible</button>
                         </div>
                     </div>
                 </div>
