@@ -32,6 +32,9 @@
             </div>
         </div>
         <?php
+        session_start();
+        unset($_SESSION['userid']); // assurez-vous que l'utilisateur est déconnecté avant de se connecter
+        unset($_SESSION['username']);
         try {
             require_once 'php/database.php';
             global $db;
