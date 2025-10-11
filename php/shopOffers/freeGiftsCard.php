@@ -2,7 +2,7 @@
 
 date_default_timezone_set('Europe/Paris');
 
-function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed): string
+function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed, $timeUntilNextGift, $pageId): string
 {
     var_dump(strtotime($timeLastUsed));
     var_dump(time());
@@ -30,8 +30,12 @@ function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed): stri
                             <h5 class="card-title">' . $cardTitle . '</h5>
                             <p class="card-text">'. $cardDescription.'</p>
                             <button class="btn btn-outline-secondary">Non disponible</button>
-                            <p>Prochain cadeau dans ''</p>
-                            <p class="hidden-data"></p>
+                            <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: ' . (time() - strtotime($timeLastUsed)) / 7200 * 100 . '%"></div>
+                            </div>
+                            <p class="free-gift-timer" id="next-gift-timer$pageId">Prochain cadeau dans </p>
+                            <p class="hidden-data" id="last-free-gift$pageId"> ' . strtotime($timeLastUsed) . '</p>
+                            <p class="hidden-data" id="next-free-gift$pageId"> ' . (strtotime($timeLastUsed) + $timeUntilNextGift) . '</p>
                         </div>
                     </div>
                 </div>
