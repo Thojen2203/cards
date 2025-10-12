@@ -18,7 +18,7 @@
 
         }
 ?>
-  <h1 class="text-center my-4">Boutique&</h1>
+  <h1 class="text-center my-4">Boutique</h1>
   <h2 class="text-center my-4"><?php session_start(); $q = $db -> prepare("SELECT user_coins, user_diamonds from user where user_id = :user_id");
     $q -> execute(["user_id" => $_SESSION['userid']]);
     $res = $q -> fetch();
