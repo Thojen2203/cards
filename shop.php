@@ -22,8 +22,8 @@
   <h2 class="text-center my-4"><?php session_start(); $q = $db -> prepare("SELECT user_coins, user_diamonds from user where user_id = :user_id");
     $q -> execute(["user_id" => $_SESSION['userid']]);
     $res = $q -> fetch();
-    echo "<h1 class='text-center'><span class='badge text-bg-secondary m-3'>" . $res['user_coins'] . " <i class='bi bi-coin'></i></span>";
-    echo "<span class='badge text-bg-secondary m-3'>" . $res['user_diamonds'] . " <i class='bi bi-gem'></i></span></h1>";
+    echo "<h1 class='text-center'><span class='badge text-bg-secondary m-3'>" . number_format($res['user_coins'], 0, ',', ' ') . " <i class='bi bi-coin'></i></span>";
+    echo "<span class='badge text-bg-secondary m-3'>" . number_format($res['user_diamonds'], 0, ',', ' ') . " <i class='bi bi-gem'></i></span></h1>";
    ?></h2>
   <div>
     <?php

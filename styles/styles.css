@@ -27,11 +27,47 @@
 
 .pack-opening-card {
   width: 300px;
-  height: 420px;
+  min-height: 420px; /* allow the card to grow vertically when extra text is present */
+  height: auto;
   perspective: 1000px;
   margin: auto;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  overflow: visible; /* allow content to be visible beyond fixed box if needed */
+}
+
+.pack-opening-card .card-img-top {
+  max-height: 220px; /* constrain image height so text has space */
+  width: 100%;
+  object-fit: cover;
+}
+
+.carte-rarete-commun {
+  background-color: lightgray;
+}
+
+.carte-rarete-inhabituelle {
+  background-color: pink;
+}
+
+.carte-rarete-rare {
+  background-color: rgba(165, 42, 42, 0.644);
+}
+
+.carte-rarete-épique {
+  background-color: lightblue;
+}
+
+.carte-rarete-mythique {
+  background-color: greenyellow;
+}
+
+.carte-rarete-légendaire {
+  background-color: gold;
+}
+
+.new-card {
+  color: green !important;
 }

@@ -19,7 +19,12 @@
     else
         echo "<h1 class='text-center my-4'>Ouverture de pack</h1>";
 
-    function giveCardToUser($user_id, $card_id, $rarity_id){
+    function giveCardToUser($user_id, $card_id, $rarity_id): array|string{
+        $duplicateCardData = [
+            'isDuplicate' => false,
+            'duplicateValue' => 0,
+            'duplicateCurrency' => ''
+        ];
         try{
             require_once 'php/database.php';
             global $db;
@@ -29,20 +34,27 @@
                 "card_id" => $card_id
             ]);
             if($hasCard -> rowCount() > 0){
-                $coinsToAdd = 0;
-                if($rarity_id == 1) $coinsToAdd = 1;
-                else if($rarity_id == 2) $coinsToAdd = 2;
-                else if($rarity_id == 3) $coinsToAdd = 5;
-                else if($rarity_id == 4) $coinsToAdd = 10;
-                else if($rarity_id == 5) $coinsToAdd = 50;
-                else if($rarity_id == 6) $coinsToAdd = 150;
-
-                $updateCardAmount = $db -> prepare("update user set user_coins = user_coins + :amount where user_id = :user_id");
-                $updateCardAmount -> execute([
-                    "amount" => $coinsToAdd,
-                    "user_id" => $user_id,
-                ]);
-
+                $duplicateCardData['isDuplicate'] = true;
+                $duplicate_value = $db -> prepare("select duplicate_value, duplicate_currency from rarity where rarity_name = :rarity_name");
+                $duplicate_value -> execute(["rarity_name" => $rarity_id]);
+                $duplicateRes = $duplicate_value -> fetch();
+                $duplicateCardData['duplicateValue'] = $duplicateRes['duplicate_value'];
+                $duplicateCardData['duplicateCurrency'] = $duplicateRes['duplicate_currency'];
+                
+                if($duplicateRes['duplicate_currency'] == 'coins'){
+                    $updateCardAmount = $db -> prepare("update user set user_coins = user_coins + :amount where user_id = :user_id");
+                    $updateCardAmount -> execute([
+                        "amount" => $duplicateRes['duplicate_value'],
+                        "user_id" => $user_id,
+                    ]);
+                }
+                else {
+                    $updateCardAmount = $db -> prepare("update user set user_diamonds = user_diamonds + :amount where user_id = :user_id");
+                    $updateCardAmount -> execute([
+                        "amount" => $duplicateRes['duplicate_value'],
+                        "user_id" => $user_id,
+                    ]);
+                }
                 // echo "Doublon : $coinsToAdd pièces ajoutées !";
             }
             else{
@@ -56,6 +68,7 @@
         }catch(Exception $e){
             echo 'Une erreur est survenue. Merci de réessayer plus tard.', $e->getMessage();
         }
+        return $duplicateCardData;
     }
 
 
@@ -171,6 +184,14 @@
 
     $rarity = 0;
     $card=null;
+    $raretes = [
+        1 => "commun",
+        2 => "inhabituelle",
+        3 => "rare",
+        4 => "épique",
+        5 => "mythique",
+        6 => "légendaire"
+    ]; // A REMPLACER PAR UNE REQUETE SQL
     foreach($res as $row){
         // echo $row['drop_in_pack_number'] . " "
         // . $row['common_drop_rate']
@@ -182,12 +203,18 @@
         // . "<br>";
         $randomMax = 1000000;
         $random = rand(1,1000000);
+        $duplicateCardData = [
+            'isDuplicate' => false,
+            'duplicateValue' => 0,
+            'duplicateCurrency' => ''
+        ];
+        $newCardText = "";
         if($random <= $row['common_drop_rate']*$randomMax){ 
             // echo "Carte commune débloquée !";
             $c = $db -> prepare("select * from cards where card_rarity = 1 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
-            giveCardToUser($_SESSION['userid'], $card['card_id'], 1);
+            $duplicateCardData = giveCardToUser($_SESSION['userid'], $card['card_id'], $raretes[1]);
             $rarity = 1;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate'])*$randomMax){
@@ -195,7 +222,7 @@
             $c = $db -> prepare("select * from cards where card_rarity = 2 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
-            giveCardToUser($_SESSION['userid'], $card['card_id'], 2);
+            $duplicateCardData = giveCardToUser($_SESSION['userid'], $card['card_id'], $raretes[2]);
             $rarity = 2;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate']+$row['rare_drop_rate'])*$randomMax){
@@ -203,7 +230,7 @@
             $c = $db -> prepare("select * from cards where card_rarity = 3 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
-            giveCardToUser($_SESSION['userid'], $card['card_id'], 3);
+            $duplicateCardData = giveCardToUser($_SESSION['userid'], $card['card_id'], $raretes[3]);
             $rarity = 3;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate']+$row['rare_drop_rate']+$row['epic_drop_rate'])*$randomMax){
@@ -211,7 +238,7 @@
             $c = $db -> prepare("select * from cards where card_rarity = 4 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
-            giveCardToUser($_SESSION['userid'], $card['card_id'], 4);
+            $duplicateCardData = giveCardToUser($_SESSION['userid'], $card['card_id'], $raretes[4]);
             $rarity = 4;
         }
         else if($random <= ($row['common_drop_rate']+$row['uncommon_drop_rate']+$row['rare_drop_rate']+$row['epic_drop_rate']+$row['mythic_drop_rate'])*$randomMax){
@@ -219,7 +246,7 @@
             $c = $db -> prepare("select * from cards where card_rarity = 5 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
-            giveCardToUser($_SESSION['userid'], $card['card_id'], 5);
+            $duplicateCardData = giveCardToUser($_SESSION['userid'], $card['card_id'], $raretes[5]);
             $rarity = 5;
         }
         else{
@@ -227,11 +254,21 @@
             $c = $db -> prepare("select * from cards where card_rarity = 6 order by rand() limit 1");
             $c -> execute();
             $card = $c -> fetch();
-            giveCardToUser($_SESSION['userid'], $card['card_id'], 6);
+            $duplicateCardData = giveCardToUser($_SESSION['userid'], $card['card_id'], $raretes[6]);
             $rarity = 6;
         }
         // echo "<br>";
-        displayCardInPackOpening($card, $card['card_id'], $rarity, $row['pack_id']);
+        var_dump($duplicateCardData);
+        if($duplicateCardData['isDuplicate'])
+            if($duplicateCardData['duplicateCurrency'] == 'coins')
+                $newCardText = "<p class='card-text'>Doublon ! + " . $duplicateCardData['duplicateValue'] . " <i class='bi bi-coin'></i></p>";
+            else if($duplicateCardData['duplicateCurrency'] == 'diamonds')
+                $newCardText = "<p class='card-text'>Doublon ! + " . $duplicateCardData['duplicateValue'] . " <i class='bi bi-gem'></i></p>";
+            else
+                $newCardText = "<p class='card-text'>Doublon ! + " . $duplicateCardData['duplicateValue'] . " " . $duplicateCardData['duplicateCurrency'] . "</p>";
+        else
+            $newCardText = "<p class='new-card fw-bold'> Nouvelle carte !</p>";
+        displayCardInPackOpening($card, $newCardText, $raretes[$rarity], $row['pack_id']);
         // echo "<br>";
     }
 
