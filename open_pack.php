@@ -258,7 +258,6 @@
             $rarity = 6;
         }
         // echo "<br>";
-        var_dump($duplicateCardData);
         if($duplicateCardData['isDuplicate'])
             if($duplicateCardData['duplicateCurrency'] == 'coins')
                 $newCardText = "<p class='card-text'>Doublon ! + " . $duplicateCardData['duplicateValue'] . " <i class='bi bi-coin'></i></p>";

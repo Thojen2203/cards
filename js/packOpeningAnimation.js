@@ -33,7 +33,7 @@ document.addEventListener('click', (e) => {
 
   // déplacer vers le bas (ajuste 300px si tu veux plus/moins)
   // card.style.transform = 'translateY(700px) scale(0.4) rotate(50deg)';
-  card.style.transform = 'translateY(0px) scale(5) rotate(50deg)';
+  card.style.transform = 'translateY(0px) scale(5) rotate(0deg)';
   card.style.opacity = '0';
 
   // nettoyage après la transition
