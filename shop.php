@@ -44,7 +44,7 @@
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col">
         <?php
-        $q = $db -> prepare("SELECT * from purchasablepacks join packs using(pack_id)");
+        $q = $db -> prepare("SELECT * from purchasablepacks join packs using(pack_id) order by price_currency asc, pack_price asc");
         $q -> execute();
 
         $res = $q -> fetchAll();
@@ -63,11 +63,20 @@
         $q = $db -> prepare("SELECT last_2h_gift, last_24h_gift, last_3d_gift, last_7d_gift from user where user_id = :user_id");
         $q -> execute(["user_id" => $_SESSION['userid']]);
         $res = $q -> fetch();
+        // echo "<div class='col-md-12'>";
+        echo "<div class='row g-0'>";
         echo displayFreeGiftsCard("Cadeau de 2 h", "Petit pack gratuit + 10 pièces toutes les 2 heures", $res['last_2h_gift'], 7200, 1);
+        echo "</div>";
+        echo "<div class='row g-0'>";
         echo displayFreeGiftsCard("Cadeau de 1 j", "Pack Plus gratuit + 30 pièces toutes les 24 heures", $res['last_24h_gift'], 86400, 2);
+        echo "</div>";
+        echo "<div class='row g-0'>";
         echo displayFreeGiftsCard("Cadeau de 3 j", "Gros pack gratuit + 50 pièces tous les 3 jours", $res['last_3d_gift'], 259200, 3);
+        echo "</div>";
+        echo "<div class='row g-0'>";
         echo displayFreeGiftsCard("Cadeau de 7 j", "Giga pack gratuit + 100 pièces tous les 7 jours", $res['last_7d_gift'], 604800, 4);
-
+        echo "</div>";
+        // echo "</div>";
         ?>
       </div>
     </div>

@@ -6,7 +6,7 @@ function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed, $time
 {
     if((time() - strtotime($timeLastUsed)) >= $timeUntilNextGift){ 
             return '
-            <div class="card m-3 w-100">
+            <div class="card m-3 w-auto">
                         <div class="card-body">
                             <h5 class="card-title">' . $cardTitle . '</h5>
                             <p class="card-text">'. $cardDescription.'</p>
@@ -17,12 +17,12 @@ function displayFreeGiftsCard($cardTitle, $cardDescription, $timeLastUsed, $time
     
     } else {
            return '
-            <div class="card m-3 w-100">
+            <div class="card m-3 w-auto">
                         <div class="card-body">
                             <h5 class="card-title">' . $cardTitle . '</h5>
                             <p class="card-text">'. $cardDescription.'</p>
-                            <div class="progress w-100" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar" style="width: ' . (time() - strtotime($timeLastUsed)) / 7200 * 100 . '%"></div>
+                            <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: ' . ((time() - strtotime($timeLastUsed)) / 7200 * 100) . '%"></div>
                             </div>
                             <p class="free-gift-timer" id="next-gift-timer' . $pageId . '">Prochain cadeau dans </p>
                             <p class="hidden-data" id="last-free-gift' . $pageId . '"> ' . strtotime($timeLastUsed) . '</p>
